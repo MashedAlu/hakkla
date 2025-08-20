@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Update</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #e1e1e1;
+            border: 2px solid #999;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #button:hover {
+            background-color: #d4d4d4;
+        }
+        
+        #button:active {
+            background-color: #c7c7c7;
+        }
+        
+        #image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            max-width: 100%;
+            max-height: 100%;
+            pointer-events: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="button">Click me</button>
+        <img id="image" src="images.png" alt="Mental Health Update" style="display: none;">
+        <audio id="audio" preload="auto">
+            <source src="hakla.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const button = document.getElementById('button');
+        const image = document.getElementById('image');
+        const audio = document.getElementById('audio');
+
+        function playSound() {
+            // Play the audio
+            audio.currentTime = 0; // Reset to beginning
+            audio.play().catch(e => {
+                console.log('Audio play failed:', e);
+                // Fallback: still show image even if audio fails
+            });
+            
+            // Show and fade in the image
+            image.style.display = 'block';
+            image.classList.remove('fade-in');
+            // Force reflow to ensure the class removal takes effect
+            image.offsetHeight;
+            image.classList.add('fade-in');
+        }
+
+        button.addEventListener('click', playSound);
+
+        // Allow audio to play on user interaction (required by many browsers)
+        document.addEventListener('click', function() {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(() => {
+                    // Audio permission not granted yet
+                });
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
